@@ -1,4 +1,4 @@
-from passlib.hash import sha256_crypt # http://pythonhosted.org/passlib/
+
 from pprint import pprint
 from db import *
 #from db import functions
@@ -11,7 +11,7 @@ class User(object):
 def dbInsertUser(email,password):
     user = User()
     user.email = email
-    user.password = sha256_crypt.encrypt(password)
+    user.passhash = password
     user.total = 0
     #DEBUG
     pprint(vars(user))
@@ -19,22 +19,17 @@ def dbInsertUser(email,password):
     insertUser(user)
     return user
 
-
-#TODO
 def dbUpdateUser(email, password, plusone = False, incrementer = False, logout_time = False):
-    if dbCheckUser(email):
-        user.incrementer = incrementer
-        user.password = sha256_crypt.encrypt(password)
-        #user.total = plusone()
+    user = User()
+    user.email = email
+    user.passhash = password
+    user.total = 0
+    user.plusone = plusone
+    user.incrementer = incrementer
+    user.logout_time = logout_time
+    state = dbCheckUser(password,user)
+    print state
 
-        #remove
-        pprint(vars(user))
-
-        return user
-
-def dbCheckUser(email):
-    user = checkUser(email)
-    if user.count() == 1:
-        return user
-    else:
-        print "fuck"
+def dbCheckUser(password,user):
+    if validateUer(password,user):
+        return "Valid"
