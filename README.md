@@ -1,4 +1,4 @@
 karmapolice
 ===========
 
-Karma Points Project
+Karma Points Project in Bottle
