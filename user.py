@@ -1,4 +1,3 @@
-
 from pprint import pprint
 from db import *
 #from db import functions
@@ -31,5 +30,5 @@ def dbUpdateUser(email, password, plusone = False, incrementer = False, logout_t
     print state
 
 def dbCheckUser(password,user):
-    if validateUer(password,user):
+    if validateUser(password,user):
         return "Valid"
