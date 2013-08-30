@@ -4,7 +4,7 @@ from db import *
 
 class User(object):
     email = ""
-    plus_one = False
+    passhash =""
     total = 0
 
 def dbInsertUser(email,password):
@@ -12,8 +12,6 @@ def dbInsertUser(email,password):
     user.email = email
     user.passhash = password
     user.total = 0
-    #DEBUG
-    pprint(vars(user))
 
     insertUser(user)
     return user
