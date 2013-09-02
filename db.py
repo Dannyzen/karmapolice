@@ -1,15 +1,13 @@
 from pymongo import Connection
-from user import dbCheckUser
+#from user import dbCheckUser
 from passlib.hash import sha256_crypt # http://pythonhosted.org/passlib/
 from pprint import pprint
 connection = Connection('localhost', 27017)
 db = connection.karma
 
 def makeObject(cursor):
-    objects = []
-    for property in cursor:
-        objects.append(property)
-    return objects
+    theObject = dict((cursor, record) for record in cursor)
+    return theObject
 
 def insertUser(user):
     if validateCursor(user,0):

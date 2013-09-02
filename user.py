@@ -4,8 +4,15 @@ from db import *
 
 class User(object):
     email = ""
-    plus_one = False
+    password = None
     total = 0
+
+def dbGetUser(email):
+    user = User()
+    user.email = email
+    user = getUser(user)
+    return user
+
 
 def dbInsertUser(email,password):
     user = User()
@@ -32,3 +39,4 @@ def dbUpdateUser(email, password, plusone = False, incrementer = False, logout_t
 def dbCheckUser(password,user):
     if validateUser(password,user):
         return "Valid"
+

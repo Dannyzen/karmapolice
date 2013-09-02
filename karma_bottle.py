@@ -23,6 +23,4 @@ def logout():
 
 @route('/user', method='GET')
 def get_user():
-    user.email = request.query.email
-    getPoints(user.email)
-
+    dbGetUser(request.query.email)
