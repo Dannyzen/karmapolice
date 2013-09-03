@@ -1,28 +1,25 @@
 import json
 import bottle
-from bottle import route, run, request, abort
-
+from bottle import route, run, request, abort, response
 from user import *
-# from db import *
 
 
 
 @route('/user', method='POST')
 def add_user():
-    user.email = request.query.email
-    user.password = request.user.password
-
-@route('/update_user', method='POST')
-def update_user():
-    user.plusone = request.query.plusone
-    user.incrementer = request.query.incrementer
-
-@route('/logout', method='POST')
-def logout():
-    user.logout_time = request.query.logout
+    dbInsertUser(request.query.email,password)
 
 @route('/user', method='GET')
 def get_user():
-    user.email = request.query.email
-    getPoints(user.email)
+    response.content_type = 'application/json'
+    rs = cleanUser(request.query.email)
+    entries = [entry for entry in rs]
+    # return entries
+    return MongoEncoder().encode(entries)
+    
+            
+@route('/update_user', method='POST')
+def update_user():
+    dbUpdateUser(request.query.email,request.query.password)
 
+run(host='localhost', port=8080)
