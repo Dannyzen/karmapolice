@@ -38,10 +38,13 @@ def validateCursor(user,expected):
         raise LookupError("Expectations not met")
     return True
 
-def getUser(user):
-    cursor = db['user'].find({"email":user.email})
+#Pymongo ensureIndex
+# make email a unique index in mongo
+def getUser(email):
+    cursor = db['user'].find_one({"email":email}, fields={"hash": -1})
     return cursor
 
+#use a salt
 def setHash(user):
     user.passhash = sha256_crypt.encrypt(user.passhash) 
     return user.passhash

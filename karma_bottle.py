@@ -1,7 +1,8 @@
-import json
 import bottle
+from bson import json_util 
 from bottle import route, run, request, abort, response
 from user import *
+from db import *
 
 
 
@@ -12,10 +13,9 @@ def add_user():
 @route('/user', method='GET')
 def get_user():
     response.content_type = 'application/json'
-    rs = cleanUser(request.query.email)
-    entries = [entry for entry in rs]
+    entry = getUser(request.query.email)
     # return entries
-    return MongoEncoder().encode(entries)
+    return json_util.dumps(entry)
     
             
 @route('/update_user', method='POST')
