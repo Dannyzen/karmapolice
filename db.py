@@ -1,12 +1,15 @@
 from pymongo import Connection
-#from user import dbCheckUser
 from passlib.hash import sha256_crypt # http://pythonhosted.org/passlib/
 from pprint import pprint
+from time import gmtime, strftime
+
 
 #belongs in a settings file
 connection = Connection('localhost', 27017)
 db = connection.karma
 
+def getNow():
+    return strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
 #for troubleshooting
 def makeObject(cursor):
@@ -14,37 +17,31 @@ def makeObject(cursor):
     return theObject
 
 def insertUser(user):
-    if validateCursor(user,0):
-        db['user'].insert({"email":user.email, "hash": setHash(user)})
+    db['user'].ensure_index("email",unique=1,background=1)
+    db['user'].insert({"email":user.email, "hash": setHash(user), "karma":user.karma})
 
-def updateUser(user):
-    entry = db['user'].update({"email":user.email},{ "$set": {"email": user.email, "hash": setHash(user), "total": user.total, "plusone": user.plusone, "incrementer": user.incrementer, "last_logout":user.logout_time}})
-    return entry
+#May want to consider changing $set to '$inc' 
+def addKarma(email, karma):
+    db['user'].update({"email":email},{ "$set": {"karma": karma}})
 
-def validateUser(password,user):
-    return verifyPassword(password,getHash(user))
+def updateThanker(email, thanker):
+    db['user'].update({"email":email},{"$push":{"thankers":{getNow():thanker}}})
+
+def validateUser(password,email):
+    return verifyPassword(password,getHash(email))
 
 def verifyPassword(password,pass_hash):
     return sha256_crypt.verify(password,pass_hash)
 
-def getHash(user):
-    cursor = getUser(user)
-    if validateCursor(user,1):
-        passhash = cursor[0]['hash']
-        return passhash
+def getHash(email):
+    cursor = db['user'].find_one({"email":email}, fields ={"hash":1})
+    return cursor['hash'] 
 
-def validateCursor(user,expected):
-    if getUser(user).count() != expected:
-        raise LookupError("Expectations not met")
-    return True
-
-#Pymongo ensureIndex
-# make email a unique index in mongo
 def getUser(email):
-    cursor = db['user'].find_one({"email":email}, fields={"hash": -1})
+    cursor = db['user'].find_one({"email":email}, fields={"email": 1, "karma": 1})
     return cursor
 
 #use a salt
 def setHash(user):
-    user.passhash = sha256_crypt.encrypt(user.passhash) 
-    return user.passhash
+    user.password = sha256_crypt.encrypt(user.password) 
+    return user.password

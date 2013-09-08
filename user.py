@@ -4,46 +4,21 @@ from db import *
 class User(object):
     email = ""
     password = None
-    total = 0
+    karma = 0
 
 def dbInsertUser(email,password):
     user = User()
     user.email = email
-    user.passhash = password
-    user.total = 0
+    user.password = password
+    user.karma = 0
 
     insertUser(user)
     return user
 
-def dbUpdateUser(email, password, plusone = False, incrementer = False, logout_time = False):
-    user = User()
-    user.email = email
-    user.passhash = password
-    user.total = 0
-    user.plusone = plusone
-    user.incrementer = incrementer
-    user.logout_time = logout_time
-    state = dbCheckUser(password,user)
-    if state == "Valid":
-        updateUser(user)
+def dbUpdateUser(email, password, karma, thanker):
+    state = validateUser(password,email)
+    if state == True:
+        updateKarma(email, karma)
+        addThanker(email, thanker)
     else:
         return "User not valid"
-
-
-def dbCheckUser(password,user):
-    if validateUser(password,user):
-        return "Valid"
-
-# MongoEncoder https://github.com/burakdd/Vaarmi/blob/master/lib/MongoEncoder.py
-# # from json import JSONEncoder
-# # from bson.objectid import ObjectId
-# # import datetime
-# # class MongoEncoder(JSONEncoder):
-# # 
-# #     def default(self, obj, **kwargs):
-# #         if isinstance(obj, ObjectId):
-# #             return str(obj)
-# #         elif isinstance(obj,datetime.datetime):
-# #             return str(obj)
-# #         else:            
-#             return JSONEncoder.default(obj, **kwargs)
