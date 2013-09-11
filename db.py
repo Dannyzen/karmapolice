@@ -3,8 +3,7 @@ from pymongo import MongoClient
 from passlib.hash import sha256_crypt # http://pythonhosted.org/passlib/
 from time import gmtime, strftime
 
-uri = karmaconfig.URI
-client = MongoClient(uri)
+client = MongoClient(karmaconfig.URI)
 db = client.get_default_database()
 
 def getNow():
