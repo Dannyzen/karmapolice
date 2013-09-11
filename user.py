@@ -1,19 +1,18 @@
-from pprint import pprint
 from db import *
 
 class User(object):
     email = ""
     password = None
+    username = ""
     karma = 0
 
-def dbInsertUser(email,password):
+def dbInsertUser(email,password,username):
     user = User()
     user.email = email
     user.password = password
+    user.username = username
     user.karma = 0
-
     insertUser(user)
-    return user
 
 def dbUpdateUser(email, password, karma, thanker):
     state = validateUser(password,email)

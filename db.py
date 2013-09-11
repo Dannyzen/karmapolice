@@ -1,12 +1,11 @@
-from pymongo import Connection
+import karmaconfig
+from pymongo import MongoClient
 from passlib.hash import sha256_crypt # http://pythonhosted.org/passlib/
-from pprint import pprint
 from time import gmtime, strftime
 
-
-#belongs in a settings file
-connection = Connection('localhost', 27017)
-db = connection.karma
+uri = karmaconfig.URI
+client = MongoClient(uri)
+db = client.get_default_database()
 
 def getNow():
     return strftime("%Y-%m-%d %H:%M:%S", gmtime())
@@ -18,7 +17,8 @@ def makeObject(cursor):
 
 def insertUser(user):
     db['user'].ensure_index("email",unique=1,background=1)
-    db['user'].insert({"email":user.email, "hash": setHash(user), "karma":user.karma})
+    db['user'].ensure_index("username",unique=1,background=1)
+    db['user'].insert({"email":user.email, "hash": setHash(user), "karma":user.karma, "username": user.username})
 
 #May want to consider changing $set to '$inc' 
 def addKarma(email, karma):
@@ -37,8 +37,12 @@ def getHash(email):
     cursor = db['user'].find_one({"email":email}, fields ={"hash":1})
     return cursor['hash'] 
 
-def getUser(email):
+def getEmail(email):
     cursor = db['user'].find_one({"email":email}, fields={"email": 1, "karma": 1})
+    return cursor
+
+def getUserName(username):
+    cursor = db['user'].find_one({"username":username}, fields={"email": 1, "karma": 1})
     return cursor
 
 #use a salt
