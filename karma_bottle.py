@@ -1,6 +1,6 @@
 import bottle
 from bson import json_util 
-from bottle import route, run, request, abort, response, error
+from bottle import route, run, request, abort, response
 from user import *
 from db import *
 
