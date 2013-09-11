@@ -15,8 +15,8 @@ def makeObject(cursor):
     return theObject
 
 def insertUser(user):
-    db['user'].ensure_index("email",unique=1,background=1)
-    db['user'].ensure_index("username",unique=1,background=1)
+    # db['user'].ensure_index("email",unique=1,background=1)
+    # db['user'].ensure_index("username",unique=1,background=1)
     db['user'].insert({"email":user.email, "hash": setHash(user), "karma":user.karma, "username": user.username})
 
 #May want to consider changing $set to '$inc' 
@@ -37,12 +37,10 @@ def getHash(email):
     return cursor['hash'] 
 
 def getEmail(email):
-    cursor = db['user'].find_one({"email":email}, fields={"email": 1, "karma": 1})
-    return cursor
+    return(db['user'].find_one({"email":email}, fields={"email": 1, "karma": 1}))
 
 def getUserName(username):
-    cursor = db['user'].find_one({"username":username}, fields={"email": 1, "karma": 1})
-    return cursor
+    return(db['user'].find_one({"username":username}, fields={"email": 1, "karma": 1}))
 
 #use a salt
 def setHash(user):
