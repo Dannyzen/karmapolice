@@ -6,12 +6,15 @@ class User(object):
     username = ""
     karma = 0
 
-def dbInsertUser(email,password,username):
-    user = User()
-    user.email = email
-    user.password = password
-    user.username = username
-    user.karma = 0
+    def __init__(self,email,password,username,karma):
+        self.email = email
+        self.password = password
+        self.username = username
+        self.karma = karma
+
+
+def dbInsertUser(email,password,username,karma = 0):
+    user = User(email,password,username,karma)
     insertUser(user)
 
 def dbUpdateUser(email, password, karma, thanker):
