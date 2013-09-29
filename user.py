@@ -1,4 +1,4 @@
-from db import *
+from db import insertUser, validateUser, updateKarma, addThanker 
 
 class User(object):
     email = ""
