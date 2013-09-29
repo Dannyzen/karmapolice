@@ -1,7 +1,7 @@
 import bottle
 from bson import json_util 
 from bottle import route, run, request, abort, response
-from user dbInsertUser, dbUpdateUser
+from user import dbInsertUser, dbUpdateUser
 from db import getUserName, getEmail
 
 
