@@ -4,7 +4,7 @@ from passlib.hash import sha256_crypt # http://pythonhosted.org/passlib/
 from time import gmtime, strftime
 
 client = MongoClient(karmaconfig.URI)
-db = client.karmaconfig.DBNAME
+db = client[karmaconfig.DBNAME]
 
 def getNow():
     return strftime("%Y-%m-%d %H:%M:%S", gmtime())
