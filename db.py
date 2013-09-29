@@ -40,7 +40,7 @@ def getEmail(email):
     return(db['user'].find_one({"email":email}, fields={"email": 1, "karma": 1}))
 
 def getUserName(username):
-    return(db['user'].find_one({"username":username}, fields={"email": 1, "karma": 1}))
+    return(db['user'].find_one({"username":username}, fields={"username": 1}))
 
 #use a salt
 def setHash(user):

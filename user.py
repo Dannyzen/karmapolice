@@ -4,7 +4,6 @@ class User(object):
     email = ""
     password = None
     username = ""
-    karma = 0
 
     def __init__(self,email,password,username,karma):
         self.email = email
