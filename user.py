@@ -1,4 +1,4 @@
-from db import insertUser, validateUser, addKarma, addThanker 
+from db import insertUser, validateUser, addKarma, updateThanker 
 
 class User(object):
     email = ""
@@ -21,6 +21,6 @@ def dbUpdateUser(email, password, karma, thanker):
     state = validateUser(password,email)
     if state == True:
         addKarma(email, karma)
-        addThanker(email, thanker)
+        updateThanker(email, thanker)
     else:
         return "User not valid"
