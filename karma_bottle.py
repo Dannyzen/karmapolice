@@ -1,12 +1,12 @@
-import bottle
 from bson import json_util 
-from bottle import route, run, request, abort, response
+from bottle import route, run, request, abort, response, Bottle
 from user import dbInsertUser, dbUpdateUser
 from db import getUserName, getEmail
 
 
+app = Bottle()
 
-@route('/user', method='POST')
+@app.route('/user', method='POST')
 def add_user():
     if not 'email' in request.query:
         return "no user provided"
@@ -24,7 +24,7 @@ def add_user():
     response.status=201
     return "OK"
 
-@route('/user', method='GET')
+@app.route('/user', method='GET')
 def get_user():
     response.content_type = 'application/json'
     entry = getEmail(request.query.email)
@@ -35,7 +35,7 @@ def get_user():
     return json_util.dumps(entry)
     
             
-@route('/update_user', method='POST')
+@app.route('/update_user', method='POST')
 def update_user():
     if not 'email' in request.query:
         response.status=428
@@ -50,4 +50,4 @@ def update_user():
     response.status=201
     return "OK"
 
-run(host='localhost', port=8080)
+app.run(host='localhost', port=8080)
